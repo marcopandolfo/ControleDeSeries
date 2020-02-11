@@ -20,3 +20,4 @@ Route::post('/series/{id}/editarNome', 'SeriesController@editaNome');
 Route::get('/series/{serieId}/temporadas', 'TemporadasController@index');
 
 Route::get('/temporadas/{temporada}/episodios', 'EpisodiosController@index');
+Route::post('/temporadas/{temporada}/episodios/assistir', 'EpisodiosController@assistir');
