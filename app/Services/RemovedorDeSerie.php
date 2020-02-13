@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Services;
 
-use App\Episodio;
-use App\Serie;
-use App\Temporada;
+use App\{Serie, Temporada, Episodio};
 use Illuminate\Support\Facades\DB;
 
 class RemovedorDeSerie
@@ -16,11 +13,9 @@ class RemovedorDeSerie
             $serie = Serie::find($serieId);
             $nomeSerie = $serie->nome;
 
-
             $this->removerTemporadas($serie);
             $serie->delete();
         });
-
 
         return $nomeSerie;
     }
@@ -38,11 +33,10 @@ class RemovedorDeSerie
 
     /**
      * @param Temporada $temporada
-     * @throws \Exception
      */
     private function removerEpisodios(Temporada $temporada): void
     {
-        $temporada->episodios()->each(function (Episodio $episodio) {
+        $temporada->episodios->each(function (Episodio $episodio) {
             $episodio->delete();
         });
     }

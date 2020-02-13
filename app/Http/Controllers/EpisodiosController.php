@@ -12,23 +12,26 @@ class EpisodiosController extends Controller
     {
         $episodios = $temporada->episodios;
         $temporadaId = $temporada->id;
+        $mensagem = $request->session()->get('mensagem');
 
-        return view('episodios.index', [
-            'episodios' => $episodios,
-            'temporadaId' => $temporadaId,
-            'mensagem' => $request->session()->get('mensagem'),
-        ]);
+        return view(
+            'episodios.index',
+            compact('episodios', 'temporadaId', 'mensagem')
+        );
     }
 
     public function assistir(Temporada $temporada, Request $request)
     {
-        $episodiosAssistidos = $request->episodios;
-        $temporada->episodios->each(function (Episodio $episodio) use ($episodiosAssistidos) {
-            $episodio->assistido = in_array($episodio->id, $episodiosAssistidos);
+        $idsEpisodiosAssistidos = array_keys($request->episodio);
+        $temporada->episodios->each(function (Episodio $episodio) use($idsEpisodiosAssistidos) {
+            $episodio->assistido = in_array(
+                $episodio->id,
+                $idsEpisodiosAssistidos
+            );
         });
         $temporada->push();
+        $request->session()->flash('mensagem', 'Episódios marcados como assistidos');
 
-        $request->session()->flash('mensagem', 'Episodios marcados como assistidos');
-        return redirect()->back();
+        return redirect('/temporadas/' . $temporada->id . '/episodios');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AdicionaCampoAssistido extends Migration
+class AdicionaColunaAssistido extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class AdicionaCampoAssistido extends Migration
     public function up()
     {
         Schema::table('episodios', function (Blueprint $table) {
-            $table->boolean('assistido')->default(false);
+            $table->boolean('assistido')
+                ->nullable();
         });
     }
 

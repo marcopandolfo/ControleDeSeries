@@ -23,7 +23,7 @@ class Temporada extends Model
     public function getEpisodiosAssistidos(): Collection
     {
         return $this->episodios->filter(function (Episodio $episodio) {
-           return $episodio->assistido;
+            return $episodio->assistido;
         });
     }
 }

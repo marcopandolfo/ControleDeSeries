@@ -9,10 +9,17 @@ use App\Services\CriadorDeSerie;
 use App\Services\RemovedorDeSerie;
 use App\Temporada;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SeriesController extends Controller
 {
-    public function index(Request $request) {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function index(Request $request)
+    {
         $series = Serie::query()
             ->orderBy('nome')
             ->get();
@@ -26,9 +33,15 @@ class SeriesController extends Controller
         return view('series.create');
     }
 
-    public function store(SeriesFormRequest $request, CriadorDeSerie $criadorDeSerie)
-    {
-        $serie = $criadorDeSerie->criarSerie($request->nome, $request->qtd_temporadas, $request->ep_por_temporada);
+    public function store(
+        SeriesFormRequest $request,
+        CriadorDeSerie $criadorDeSerie
+    ) {
+        $serie = $criadorDeSerie->criarSerie(
+            $request->nome,
+            $request->qtd_temporadas,
+            $request->ep_por_temporada
+        );
 
         $request->session()
             ->flash(
@@ -52,8 +65,8 @@ class SeriesController extends Controller
 
     public function editaNome(int $id, Request $request)
     {
-        $novoNome = $request->nome;
         $serie = Serie::find($id);
+        $novoNome = $request->nome;
         $serie->nome = $novoNome;
         $serie->save();
     }
